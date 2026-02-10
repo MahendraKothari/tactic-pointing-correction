@@ -264,8 +264,13 @@ if st.button("▶️ START ANALYSIS", type="primary", use_container_width=True):
                     # Info about temporary storage
                     st.markdown(
                         '<div class="info-box">'
-                        '<b>ℹ️ Note:</b> Files are processed in temporary storage and available for download below. '
-                        'Click the download buttons to save results to your computer.'
+                        '<b>ℹ️ Storage & Download Information:</b><br>'
+                        '• Files are processed in cloud temporary storage (not saved permanently)<br>'
+                        '• Click download buttons below to save results to <b>your computer</b><br>'
+                        '• Default save location: Your browser\'s Downloads folder<br>'
+                        '&nbsp;&nbsp;→ Windows: <code>C:\\Users\\YourName\\Downloads</code><br>'
+                        '&nbsp;&nbsp;→ Linux: <code>~/Downloads</code><br>'
+                        '• To change location: Check your browser download settings or select "Ask where to save"'
                         '</div>',
                         unsafe_allow_html=True
                     )
