@@ -89,45 +89,17 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
-# CSS Styling
-st.markdown("""
-    <style>
-    .header-container {
-        
-        padding: 15px 20px;
-        border-radius: 12px;
-        margin-bottom: 20px;
-        
-        
-    }
-    
-    .main-header {
-        font-size: 2.5rem;
-        font-weight: bold;
-        color: #1565C0;
-        text-align: center;
-        margin-bottom: 0;
-    }
-    
-    .developer-credits {
-        font-size: 1.1rem;
-        color: #546E7A;
-        text-align: center;
-        margin-top: 5px;
-        font-weight: 500;
-    }
-    </style>
-""", unsafe_allow_html=True)
+# Header
+st.markdown('<div class="main-header">🔭 TACTIC Pointing Correction Tool</div>', unsafe_allow_html=True)
 
-# Single container for both
-st.markdown("""
-    <div class="header-container">
-        <div class="main-header">🔭 TACTIC Pointing Correction Tool</div>
-        <div class="developer-credits">
-            Developed by: <span style="font-weight:600">Mahendra Kothari</span> & <span style="font-weight:600">Muskan Maheshwari</span>
-        </div>
-    </div>
-""", unsafe_allow_html=True)
+# Developer Credits
+st.markdown(
+    '<div class="developer-credits">'
+    ' Developed by: Mahendra Kothari & Muskan Maheshwari '
+    '</div>',
+    unsafe_allow_html=True
+)
+
 # Sidebar for configuration
 st.sidebar.header("⚙️ Configuration")
 
