@@ -89,6 +89,28 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
+# CSS Styling
+st.markdown("""
+    <style>
+    .main-header {
+        font-size: 2.5rem;
+        font-weight: bold;
+        color: #1E3A8A;
+        text-align: center;
+        margin-bottom: 10px;
+    }
+    
+    .developer-credits {
+        font-size: 1rem;
+        color: #666666;
+        text-align: center;
+        margin-top: -5px;
+        margin-bottom: 30px;
+        font-style: italic;
+    }
+    </style>
+""", unsafe_allow_html=True)
+
 # Header
 st.markdown('<div class="main-header">🔭 TACTIC Pointing Correction Tool</div>', unsafe_allow_html=True)
 
@@ -516,7 +538,7 @@ st.markdown(
     '<div class="footer">'
     '<h3>🔭 TACTIC Pointing Correction Tool</h3>'
     '<p style="font-size: 20px; margin: 15px 0;">'
-    '👨‍💻 <b>Developed by:</b> Mahendra Kothari & Muskan Maheshwari 👩‍💻'
+    ' <b>Developed by:</b> Mahendra Kothari & Muskan Maheshwari '
     '</p>'
     '<p style="margin: 10px 0;">Automated Telescope Pointing Analysis System</p>'
     '<p style="margin: 10px 0;">For astronomical observations and telescope calibration</p>'
