@@ -1,6 +1,6 @@
 """
 TACTIC Pointing Correction - Streamlit Web Version
-Complete version with all features and proper credits
+Complete version with all features, credits, and save all images option
 Developed by: Mahendra Kothari and Muskan Maheshwari
 """
 
@@ -9,6 +9,7 @@ import os
 import numpy as np
 from io import BytesIO
 import tempfile
+import zipfile
 from TACTIC_Pointing_Correction import TACTICPointingCorrection
 
 st.set_page_config(
@@ -58,6 +59,14 @@ st.markdown("""
         padding: 15px;
         border-radius: 8px;
         border-left: 4px solid #2196f3;
+        margin: 10px 0;
+    }
+    
+    .warning-box {
+        background: #fff3e0;
+        padding: 15px;
+        border-radius: 8px;
+        border-left: 4px solid #ff9800;
         margin: 10px 0;
     }
     
@@ -192,6 +201,40 @@ with col2:
         key="post_orders"
     )
 
+# Detection Image Saving Options
+st.header("🖼️ Detection Image Options")
+
+col1, col2 = st.columns([3, 1])
+with col1:
+    save_all_images = st.checkbox(
+        "💾 Save ALL detection images (default: first 5 only)",
+        value=False,
+        key="save_all_images",
+        help="Enable to save annotated detection images for all FITS files"
+    )
+with col2:
+    if save_all_images:
+        st.success("✓ All images")
+    else:
+        st.info("First 5 only")
+
+if save_all_images:
+    st.markdown(
+        '<div class="warning-box">'
+        '<b>⚠️ Note:</b> Saving all images will increase processing time and download file size. '
+        'Detection images will be available as a ZIP file.'
+        '</div>',
+        unsafe_allow_html=True
+    )
+else:
+    st.markdown(
+        '<div class="info-box">'
+        '<b>ℹ️ Info:</b> Only first 5 detection images will be saved for quick preview. '
+        'This is faster and recommended for most cases.'
+        '</div>',
+        unsafe_allow_html=True
+    )
+
 # Analysis Button
 st.markdown("---")
 st.header("🚀 Run Analysis")
@@ -228,6 +271,9 @@ if st.button("▶️ START ANALYSIS", type="primary", use_container_width=True):
                 analyzer.timestamp_file = timestamp_path
                 analyzer.output_dir = tmpdir
                 
+                # Set save count based on checkbox
+                analyzer.save_count = 999999 if save_all_images else 5
+                
                 # Set reference points
                 analyzer.reference_points = {
                     'A_up': (led_a_x, led_a_y),
@@ -261,16 +307,17 @@ if st.button("▶️ START ANALYSIS", type="primary", use_container_width=True):
                     st.markdown("---")
                     st.header("📊 Results & Downloads")
                     
-                    # Info about temporary storage
+                    # Info about storage and downloads
                     st.markdown(
                         '<div class="info-box">'
                         '<b>ℹ️ Storage & Download Information:</b><br>'
-                        '• Files are processed in cloud temporary storage (not saved permanently)<br>'
+                        '• Files are processed in cloud temporary storage (not saved permanently on server)<br>'
                         '• Click download buttons below to save results to <b>your computer</b><br>'
                         '• Default save location: Your browser\'s Downloads folder<br>'
                         '&nbsp;&nbsp;→ Windows: <code>C:\\Users\\YourName\\Downloads</code><br>'
                         '&nbsp;&nbsp;→ Linux: <code>~/Downloads</code><br>'
-                        '• To change location: Check your browser download settings or select "Ask where to save"'
+                        '&nbsp;&nbsp;→ Mac: <code>~/Downloads</code><br>'
+                        '• To change location: Check your browser download settings or select "Ask where to save each file"'
                         '</div>',
                         unsafe_allow_html=True
                     )
@@ -306,7 +353,7 @@ if st.button("▶️ START ANALYSIS", type="primary", use_container_width=True):
                         
                         with open(excel_path, 'rb') as f:
                             st.download_button(
-                                "📊 Download Excel Results",
+                                "📊 Excel Results",
                                 f.read(),
                                 "pointing_correction_results.xlsx",
                                 "application/vnd.ms-excel",
@@ -320,7 +367,7 @@ if st.button("▶️ START ANALYSIS", type="primary", use_container_width=True):
                         if os.path.exists(plot_path):
                             with open(plot_path, 'rb') as f:
                                 st.download_button(
-                                    "📈 Download Plots",
+                                    "📈 Fit Plots",
                                     f.read(),
                                     "pointing_fits_pre_post.png",
                                     "image/png",
@@ -328,19 +375,42 @@ if st.button("▶️ START ANALYSIS", type="primary", use_container_width=True):
                                     help="Polynomial fit visualization"
                                 )
                     
-                    # Text results download
+                    # Detection images ZIP download
                     with col3:
-                        txt_path = os.path.join(tmpdir, "fit_results_pre_post.txt")
-                        if os.path.exists(txt_path):
-                            with open(txt_path, 'rb') as f:
+                        detection_dir = os.path.join(tmpdir, "detection_images")
+                        if os.path.exists(detection_dir) and os.listdir(detection_dir):
+                            zip_path = os.path.join(tmpdir, "detection_images.zip")
+                            
+                            # Create ZIP file
+                            with zipfile.ZipFile(zip_path, 'w', zipfile.ZIP_DEFLATED) as zipf:
+                                for img_file in os.listdir(detection_dir):
+                                    file_path = os.path.join(detection_dir, img_file)
+                                    zipf.write(file_path, img_file)
+                            
+                            with open(zip_path, 'rb') as f:
+                                image_count = len(os.listdir(detection_dir))
                                 st.download_button(
-                                    "📄 Download Fit Results",
+                                    f"🖼️ Images ({image_count})",
                                     f.read(),
-                                    "fit_results_pre_post.txt",
-                                    "text/plain",
+                                    "detection_images.zip",
+                                    "application/zip",
                                     use_container_width=True,
-                                    help="Detailed fit statistics"
+                                    help=f"ZIP file with {image_count} annotated detection images"
                                 )
+                        else:
+                            st.info("No images saved")
+                    
+                    # Text results download (if exists)
+                    txt_path = os.path.join(tmpdir, "fit_results_pre_post.txt")
+                    if os.path.exists(txt_path):
+                        with open(txt_path, 'rb') as f:
+                            st.download_button(
+                                "📄 Fit Results (TXT)",
+                                f.read(),
+                                "fit_results_pre_post.txt",
+                                "text/plain",
+                                help="Detailed fit statistics and coefficients"
+                            )
                     
                     # Show plots inline
                     st.subheader("📈 Pre/Post Transit Polynomial Fits")
@@ -397,15 +467,26 @@ with st.expander("📖 How to Use"):
        - Choose fitting orders for Pre and Post transit
        - Default: 1st, 2nd, 3rd order
     
-    5. **Run Analysis:**
+    5. **Detection Images (Optional):**
+       - Check "Save ALL images" to download all annotated FITS images
+       - Default: First 5 images only (recommended for faster processing)
+    
+    6. **Run Analysis:**
        - Click "START ANALYSIS" button
        - Wait for processing (2-5 minutes)
-       - Download results
+       - Download results from your browser's Downloads folder
     
     ### Output Files:
     - **Excel:** Complete data table with all measurements
     - **Plots:** Polynomial fit visualizations
-    - **Text:** Detailed fit statistics and coefficients
+    - **Images (ZIP):** Annotated detection images (5 or all, based on selection)
+    - **Text:** Detailed fit statistics and coefficients (if available)
+    
+    ### Download Location:
+    - Files save to your browser's default Downloads folder
+    - Windows: `C:\\Users\\YourName\\Downloads`
+    - Linux/Mac: `~/Downloads`
+    - Change in browser settings if needed
     """)
 
 with st.expander("🔬 Technical Details"):
@@ -422,6 +503,12 @@ with st.expander("🔬 Technical Details"):
     - Scale Factor = 16mm / (LED_B_y - LED_A_y)
     - Correction_X = (Star_X - Center_X) × Scale × 0.318 × 60 [arcmin]
     - Correction_Y = (Center_Y - Star_Y) × Scale × 0.318 × 60 [arcmin]
+    
+    ### Detection Images:
+    - Annotated images show detected LED and star positions
+    - First 5 images saved by default (faster)
+    - Enable "Save ALL" to get complete set (slower, larger download)
+    - Images provided as ZIP file for easy download
     """)
 
 # Footer with credits
@@ -434,7 +521,7 @@ st.markdown(
     '<p style="margin: 10px 0;">Automated Telescope Pointing Analysis System</p>'
     '<p style="margin: 10px 0;">For astronomical observations and telescope calibration</p>'
     '<p style="margin-top: 20px; font-size: 12px; color: #aaa;">'
-    'Version 2.0 | 2026 | Web-based Application'
+    'Version 2.0 | February 2026 | Web-based Application'
     '</p>'
     '</div>',
     unsafe_allow_html=True
