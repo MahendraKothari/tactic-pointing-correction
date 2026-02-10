@@ -92,36 +92,42 @@ st.markdown("""
 # CSS Styling
 st.markdown("""
     <style>
+    .header-container {
+        background: linear-gradient(135deg, #f5f7fa 0%, #e4edf5 100%);
+        padding: 15px 20px;
+        border-radius: 12px;
+        margin-bottom: 20px;
+        border: 1px solid #d1e3ff;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    }
+    
     .main-header {
         font-size: 2.5rem;
         font-weight: bold;
-        color: #1E3A8A;
+        color: #1565C0;
         text-align: center;
-        margin-bottom: 10px;
+        margin-bottom: 0;
     }
     
     .developer-credits {
-        font-size: 1rem;
-        color: #666666;
+        font-size: 1.1rem;
+        color: #546E7A;
         text-align: center;
-        margin-top: -5px;
-        margin-bottom: 30px;
-        font-style: italic;
+        margin-top: 5px;
+        font-weight: 500;
     }
     </style>
 """, unsafe_allow_html=True)
 
-# Header
-st.markdown('<div class="main-header">🔭 TACTIC Pointing Correction Tool</div>', unsafe_allow_html=True)
-
-# Developer Credits
-st.markdown(
-    '<div class="developer-credits">'
-    '👨‍💻 Developed by: Mahendra Kothari & Muskan Maheshwari 👩‍💻'
-    '</div>',
-    unsafe_allow_html=True
-)
-
+# Single container for both
+st.markdown("""
+    <div class="header-container">
+        <div class="main-header">🔭 TACTIC Pointing Correction Tool</div>
+        <div class="developer-credits">
+            Developed by: <span style="font-weight:600">Mahendra Kothari</span> & <span style="font-weight:600">Muskan Maheshwari</span>
+        </div>
+    </div>
+""", unsafe_allow_html=True)
 # Sidebar for configuration
 st.sidebar.header("⚙️ Configuration")
 
