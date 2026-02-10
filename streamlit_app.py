@@ -93,12 +93,12 @@ st.markdown("""
 st.markdown("""
     <style>
     .header-container {
-        background: linear-gradient(135deg, #f5f7fa 0%, #e4edf5 100%);
+        
         padding: 15px 20px;
         border-radius: 12px;
         margin-bottom: 20px;
-        border: 1px solid #d1e3ff;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        
+        
     }
     
     .main-header {
