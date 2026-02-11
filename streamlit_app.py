@@ -1,5 +1,5 @@
 """
-TACTIC Pointing Correction - Streamlit Web Version
+Telescope Pointing Correction - Streamlit Web Version
 Complete version with all features, credits, and save all images option
 Developed by: Mahendra Kothari and Muskan Maheshwari
 """
@@ -91,8 +91,8 @@ st.markdown("""
 
 st.markdown(
     '<div class="main-header">'
-    '🔭 TACTIC Pointing Correction Tool<br>'
-    '<span style="font-size: 15px; font-weight: normal; margin-top: 5px; display: block;">'
+    '🔭 Telescope Pointing Correction Tool<br>'
+    '<span style="font-size: 18px; font-weight: normal; margin-top: 9px; display: block;">'
     'Developed by: Mahendra Kothari & Muskan Maheshwari '
     '</span>'
     '</div>', 
@@ -513,7 +513,7 @@ with st.expander("🔬 Technical Details"):
 # Footer with credits
 st.markdown(
     '<div class="footer">'
-    '<h3>🔭 TACTIC Pointing Correction Tool</h3>'
+    '<h3>🔭 Telescope Pointing Correction Tool</h3>'
     '<p style="font-size: 20px; margin: 15px 0;">'
     ' <b>Developed by:</b> Mahendra Kothari & Muskan Maheshwari '
     '</p>'
