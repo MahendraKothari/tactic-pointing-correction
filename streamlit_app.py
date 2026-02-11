@@ -92,8 +92,8 @@ st.markdown("""
 st.markdown(
     '<div class="main-header">'
     '🔭 TACTIC Pointing Correction Tool<br>'
-    '<span style="font-size: 20px; font-weight: normal; margin-top: 10px; display: block;">'
-    '👨‍💻 Developed by: Mahendra Kothari & Muskan Maheshwari 👩‍💻'
+    '<span style="font-size: 15px; font-weight: normal; margin-top: 5px; display: block;">'
+    'Developed by: Mahendra Kothari & Muskan Maheshwari '
     '</span>'
     '</div>', 
     unsafe_allow_html=True
